@@ -1,0 +1,5 @@
+.rack {
+  display: flex;
+  overflow: scroll hidden;
+  scroll-snap-type: x mandatory;
+}

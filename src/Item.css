@@ -1,0 +1,9 @@
+img {
+  min-width: 280px;
+  height: 280px;
+  margin: 16px;
+  object-fit: cover;
+  border-radius: 16px;
+
+  scroll-snap-align: start;
+}

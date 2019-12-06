@@ -5,14 +5,26 @@ import "./Rack.css";
 export const Rack = ({ items }) => {
   const ref = useRef();
   const handleScroll = () => {
-    ref.current.scroll({ left: 800, top: 0, behaviour: "smooth" });
+    ref.current.scrollIntoView({ behaviour: "smooth" });
   };
   return (
     <>
-      <div className="rack" ref={ref}>
-        {[...Array(items).keys()].map(item => (
-          <Item key={item} id={item} />
-        ))}
+      <div className="rack">
+        {[...Array(items).keys()].map(item => {
+          return (
+            <div
+              key={item}
+              ref={item === 5 ? ref : console.log(item) && undefined}
+              style={{
+                minWidth: 280,
+                height: 280,
+                margin: 16,
+                background: "limegreen"
+              }}
+            />
+            // <Item key={item} id={item} ref={item === 5 ? ref : undefined} />
+          );
+        })}
       </div>
       <button onClick={handleScroll}>Scroll</button>
     </>

@@ -9,15 +9,17 @@ body {
 }
 
 .rack {
-  display: flex;
-  overflow: scroll hidden;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min-content;
+  column-gap: 32px;
+  overflow: auto hidden;
   scroll-snap-type: x mandatory;
 }
 
 img {
   min-width: 280px;
   height: 280px;
-  margin: 16px;
   object-fit: cover;
   border-radius: 16px;
   scroll-snap-align: start;

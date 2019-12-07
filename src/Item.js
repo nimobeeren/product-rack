@@ -1,5 +1,8 @@
-import React, { forwardRef } from "react";
+import React from "react";
 
-export const Item = forwardRef(({ id = 0 }, ref) => (
-  <img ref={ref} src={`https://picsum.photos/id/${250 + id}/500`} />
-));
+export const Item = ({ id = 0, placeholder }) =>
+  placeholder ? (
+    <div className="item" />
+  ) : (
+    <img className="item" src={`https://picsum.photos/id/${250 + id}/500`} />
+  );

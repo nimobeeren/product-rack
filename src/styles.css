@@ -15,10 +15,11 @@ body {
   scroll-snap-type: x mandatory;
 }
 
-img {
+.item {
   min-width: 280px;
   height: 280px;
   object-fit: cover;
   border-radius: 16px;
   scroll-snap-align: start;
+  border: 1px solid gray;
 }

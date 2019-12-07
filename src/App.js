@@ -1,8 +1,7 @@
 import React from "react";
 import { Rack } from "./Rack";
-import "./App.css";
 
-export default () => (
+export const App = () => (
   <div className="app">
     <Rack items={8} />
   </div>

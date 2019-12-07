@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import { Item } from "./Item";
-import "./Rack.css";
 
 export const Rack = ({ items }) => {
   const ref = useRef();

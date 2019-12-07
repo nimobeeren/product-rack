@@ -6,16 +6,20 @@ export const Rack = ({ items }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+  // TODO: update on load
   // TODO: update on resize
   const handleScroll = event => {
     const container = event.currentTarget;
 
-    const pageWidth = container.getBoundingClientRect().width;
+    const viewWidth = container.getBoundingClientRect().width;
     const totalWidth = container.scrollWidth;
-    console.log({ pageWidth, totalWidth });
+    const itemWidth = totalWidth / items;
+    const visibleItems = Math.floor(viewWidth / itemWidth); // FIXME not quite perfect
+    const pageWidth = visibleItems * itemWidth;
+    console.log({ pageWidth: viewWidth, totalWidth, itemWidth, visibleItems });
     const scrollPosNew = container.scrollLeft;
     const currentPageNew = Math.floor(scrollPosNew / pageWidth) + 1;
-    const totalPagesNew = Math.ceil(totalWidth / pageWidth); // FIXME
+    const totalPagesNew = items / visibleItems;
 
     setScrollPos(scrollPosNew);
     setCurrentPage(currentPageNew);

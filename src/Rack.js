@@ -5,7 +5,7 @@ import "./Rack.css";
 export const Rack = ({ items }) => {
   const ref = useRef();
   const handleScroll = () => {
-    ref.current.scrollIntoView({ behaviour: "smooth" });
+    ref.current.scrollIntoView({ behavior: "smooth" });
   };
   return (
     <>

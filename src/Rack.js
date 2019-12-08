@@ -4,6 +4,7 @@ import { Item } from "./Item";
 export const Rack = ({ items }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [pageWidth, setPageWidth] = useState(0);
   const [numPlaceholders, setNumPlaceholders] = useState(0);
 
   const containerRef = useRef();
@@ -16,14 +17,21 @@ export const Rack = ({ items }) => {
     const gapWidth = parseFloat(window.getComputedStyle(container).columnGap);
     const itemWidth = (totalWidth + gapWidth) / (items + numPlaceholders);
     const itemsPerPage = Math.floor((viewWidth + gapWidth) / itemWidth);
-    const pageWidth = itemsPerPage * itemWidth;
+    const pageWidthNew = itemsPerPage * itemWidth;
     const totalPagesNew = Math.ceil(items / itemsPerPage);
 
-    console.log({ viewWidth, totalWidth, itemWidth, itemsPerPage });
-
-    setCurrentPage(Math.floor(container.scrollLeft / pageWidth) + 1);
+    setCurrentPage(Math.floor(container.scrollLeft / pageWidthNew) + 1);
     setTotalPages(totalPagesNew);
+    setPageWidth(pageWidthNew);
     setNumPlaceholders(totalPagesNew * itemsPerPage - items);
+  };
+
+  const scrollToPage = page => {
+    const container = containerRef.current;
+    container.scrollTo({
+      left: (page - 1) * pageWidth,
+      behavior: "smooth"
+    });
   };
 
   // these are all the triggers for updating
@@ -42,9 +50,11 @@ export const Rack = ({ items }) => {
         ))}
       </div>
       <div>
-        <pre>currentPage: {currentPage}</pre>
-        <pre>totalPages: {totalPages}</pre>
-        <pre>numPlaceholders: {numPlaceholders}</pre>
+        <button onClick={() => scrollToPage(currentPage - 1)}>Prev</button>
+        <span>
+          {currentPage} / {totalPages}
+        </span>
+        <button onClick={() => scrollToPage(currentPage + 1)}>Next</button>
       </div>
     </>
   );

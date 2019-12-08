@@ -16,5 +16,5 @@ body {
   height: 280px;
   object-fit: cover;
   border-radius: 16px;
-  scroll-snap-align: start; /* TODO: prevent scrolling to placeholders? */
+  scroll-snap-align: start;
 }

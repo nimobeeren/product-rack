@@ -22,10 +22,8 @@ export const Rack = ({ items }) => {
     console.log({ viewWidth, totalWidth, itemWidth, itemsPerPage });
     const scrollPosNew = container.scrollLeft;
     const currentPageNew = Math.floor(scrollPosNew / pageWidth) + 1;
-    const totalPagesNew = items / itemsPerPage;
-    // FIXME: when just on the edge of 1 more or less visible item, the number of placeholders
-    // affects the inaccuracy of itemWidth just enough to make it jitter
-    const numPlaceholdersNew = itemsPerPage - (items % itemsPerPage);
+    const totalPagesNew = Math.ceil(items / itemsPerPage);
+    const numPlaceholdersNew = totalPagesNew * itemsPerPage - items;
 
     setScrollPos(scrollPosNew);
     setCurrentPage(currentPageNew);

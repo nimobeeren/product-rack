@@ -21,5 +21,4 @@ body {
   object-fit: cover;
   border-radius: 16px;
   scroll-snap-align: start;
-  border: 1px solid gray;
 }

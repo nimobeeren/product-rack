@@ -71,7 +71,7 @@ export const Rack = ({ items }) => {
           ))}
         </div>
       </div>
-      <div>
+      <div className="controls">
         <button onClick={() => scrollToPage(currentPage - 1)}>Prev</button>
         <span>
           {currentPage} / {totalPages}

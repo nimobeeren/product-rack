@@ -9,11 +9,11 @@ export const App = () => {
     <>
       <Rack items={items} />
       <div>
-        <span>
-          <pre>items: {items}</pre>
+        <span className="controls">
+          <button onClick={remove}>-</button>
+          <span>{items}</span>
+          <button onClick={add}>+</button>
         </span>
-        <button onClick={add}>+</button>
-        <button onClick={remove}>-</button>
       </div>
     </>
   );

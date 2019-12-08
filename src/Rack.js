@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { Item } from "./Item";
 
 export const Rack = ({ items }) => {
-  console.log("render");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [numPlaceholders, setNumPlaceholders] = useState(0);
@@ -27,7 +26,8 @@ export const Rack = ({ items }) => {
     setNumPlaceholders(totalPagesNew * itemsPerPage - items);
   };
 
-  useEffect(update); // update on mount
+  // these are all the triggers for updating
+  useEffect(update);
   const handleScroll = update;
   window.onresize = update;
 

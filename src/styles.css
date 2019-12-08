@@ -4,18 +4,19 @@ body {
 
 .wrapper {
   --height: 280px;
-  --paddingLeft: 128px;
-  --gap: 32px;
+  --paddingWidth: 128px;
+  --gapWidth: 32px;
   height: var(--height);
 }
 
-.rack {
+.container {
   position: absolute;
   left: 0;
-  width: 100%;
+  width: 100vw;
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: min-content;
+  column-gap: var(--gapWidth);
   overflow: auto hidden;
   scroll-snap-type: x mandatory;
 }
@@ -25,12 +26,13 @@ body {
   height: var(--height);
   object-fit: cover;
   border-radius: 16px;
+  border: 1px solid gainsboro;
 }
 
 .item-wrapper {
   scroll-snap-align: start;
-  padding-left: var(--paddingLeft);
-  margin-left: calc(var(--gap) - var(--paddingLeft));
+  padding-left: var(--paddingWidth);
+  margin-left: calc(-1 * var(--paddingWidth));
 }
 
 .item-wrapper:first-of-type {
@@ -38,5 +40,5 @@ body {
 }
 
 .item-wrapper:last-of-type {
-  padding-right: 16px;
+  padding-right: var(--gapWidth);
 }

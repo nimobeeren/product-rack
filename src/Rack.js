@@ -8,24 +8,38 @@ export const Rack = ({ items }) => {
   const [numPlaceholders, setNumPlaceholders] = useState(0);
 
   const containerRef = useRef();
+  const itemWrapperRef = useRef();
 
   const update = () => {
     const container = containerRef.current;
+    const itemWrapper = itemWrapperRef.current;
 
-    const viewWidth = container.getBoundingClientRect().width;
-    const totalWidth = container.scrollWidth;
     const gapWidth =
       parseFloat(window.getComputedStyle(container).columnGap) || 0;
+    const paddingWidth =
+      parseFloat(window.getComputedStyle(itemWrapper).paddingLeft) || 0;
+
+    const viewWidth = container.getBoundingClientRect().width - paddingWidth;
+    const totalWidth = container.scrollWidth - paddingWidth - gapWidth;
     const itemWidth = (totalWidth + gapWidth) / (items + numPlaceholders);
     const itemsPerPage = Math.floor((viewWidth + gapWidth) / itemWidth);
     const pageWidthNew = itemsPerPage * itemWidth;
     const totalPagesNew = Math.ceil(items / itemsPerPage);
-    console.log({ itemsPerPage });
+    const currentPageNew = Math.floor(container.scrollLeft / pageWidthNew) + 1;
+    const numPlaceholdersNew = totalPagesNew * itemsPerPage - items;
 
-    setCurrentPage(Math.floor(container.scrollLeft / pageWidthNew) + 1);
+    console.log({
+      itemsPerPage,
+      numPlaceholdersNew,
+      itemWidth,
+      viewWidth,
+      totalWidth
+    });
+
+    setCurrentPage(currentPageNew);
     setTotalPages(totalPagesNew);
     setPageWidth(pageWidthNew);
-    setNumPlaceholders(totalPagesNew * itemsPerPage - items);
+    setNumPlaceholders(numPlaceholdersNew);
   };
 
   // TODO: track scroll target
@@ -45,9 +59,13 @@ export const Rack = ({ items }) => {
   return (
     <>
       <div className="wrapper">
-        <div className="rack" ref={containerRef} onScroll={handleScroll}>
+        <div className="container" ref={containerRef} onScroll={handleScroll}>
           {[...Array(items + numPlaceholders).keys()].map(item => (
-            <div className="item-wrapper" key={item}>
+            <div
+              className="item-wrapper"
+              ref={item === 0 ? itemWrapperRef : undefined}
+              key={item}
+            >
               <Item id={item} placeholder={item >= items} />
             </div>
           ))}

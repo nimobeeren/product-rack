@@ -14,11 +14,13 @@ export const Rack = ({ items }) => {
 
     const viewWidth = container.getBoundingClientRect().width;
     const totalWidth = container.scrollWidth;
-    const gapWidth = parseFloat(window.getComputedStyle(container).columnGap);
+    const gapWidth =
+      parseFloat(window.getComputedStyle(container).columnGap) || 0;
     const itemWidth = (totalWidth + gapWidth) / (items + numPlaceholders);
     const itemsPerPage = Math.floor((viewWidth + gapWidth) / itemWidth);
     const pageWidthNew = itemsPerPage * itemWidth;
     const totalPagesNew = Math.ceil(items / itemsPerPage);
+    console.log({ itemsPerPage });
 
     setCurrentPage(Math.floor(container.scrollLeft / pageWidthNew) + 1);
     setTotalPages(totalPagesNew);
@@ -26,6 +28,7 @@ export const Rack = ({ items }) => {
     setNumPlaceholders(totalPagesNew * itemsPerPage - items);
   };
 
+  // TODO: track scroll target
   const scrollToPage = page => {
     const container = containerRef.current;
     container.scrollTo({
@@ -41,13 +44,14 @@ export const Rack = ({ items }) => {
 
   return (
     <>
-      <div className="rack" ref={containerRef} onScroll={handleScroll}>
-        {[...Array(items).keys()].map(item => (
-          <Item key={item} id={item} />
-        ))}
-        {[...Array(numPlaceholders).keys()].map(item => (
-          <Item key={`placeholder${item}`} placeholder />
-        ))}
+      <div className="wrapper">
+        <div className="rack" ref={containerRef} onScroll={handleScroll}>
+          {[...Array(items + numPlaceholders).keys()].map(item => (
+            <div className="item-wrapper" key={item}>
+              <Item id={item} placeholder={item >= items} />
+            </div>
+          ))}
+        </div>
       </div>
       <div>
         <button onClick={() => scrollToPage(currentPage - 1)}>Prev</button>

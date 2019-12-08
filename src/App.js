@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Rack } from "./Rack";
 
 export const App = () => {
-  const [items, setItems] = useState(12);
+  const [items, setItems] = useState(8);
   const add = () => setItems(items + 1);
   const remove = () => setItems(items - 1);
   return (

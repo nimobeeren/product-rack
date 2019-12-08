@@ -2,19 +2,41 @@ body {
   margin: 16px;
 }
 
+.wrapper {
+  --height: 280px;
+  --paddingLeft: 128px;
+  --gap: 32px;
+  height: var(--height);
+}
+
 .rack {
+  position: absolute;
+  left: 0;
+  width: 100%;
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: min-content;
-  column-gap: 32px;
   overflow: auto hidden;
   scroll-snap-type: x mandatory;
 }
 
 .item {
   min-width: 280px;
-  height: 280px;
+  height: var(--height);
   object-fit: cover;
   border-radius: 16px;
+}
+
+.item-wrapper {
   scroll-snap-align: start;
+  padding-left: var(--paddingLeft);
+  margin-left: calc(var(--gap) - var(--paddingLeft));
+}
+
+.item-wrapper:first-of-type {
+  margin-left: 0;
+}
+
+.item-wrapper:last-of-type {
+  padding-right: 16px;
 }

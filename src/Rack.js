@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Item } from "./Item";
 
-export const Rack = ({ items }) => {
+export const Rack = ({ items, paddingWidth = 128 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [pageWidth, setPageWidth] = useState(0);
@@ -16,8 +16,8 @@ export const Rack = ({ items }) => {
 
     const gapWidth =
       parseFloat(window.getComputedStyle(container).columnGap) || 0;
-    const paddingWidth =
-      parseFloat(window.getComputedStyle(itemWrapper).paddingLeft) || 0;
+    // const paddingWidth =
+    //   parseFloat(window.getComputedStyle(itemWrapper).paddingLeft) || 0;
 
     const viewWidth = container.getBoundingClientRect().width - paddingWidth;
     const totalWidth = container.scrollWidth - paddingWidth - gapWidth;

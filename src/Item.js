@@ -4,5 +4,5 @@ export const Item = ({ id = 0, placeholder }) =>
   placeholder ? (
     <div className="item" />
   ) : (
-    <img className="item" src={`https://picsum.photos/id/${250 + id}/500`} />
+    <img className="item" src={`https://picsum.photos/id/${230 + id}/500`} />
   );

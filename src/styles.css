@@ -12,9 +12,12 @@ body {
 }
 
 .container {
+  box-sizing: border-box;
   position: absolute;
   left: 0;
   width: 100vw;
+  padding-left: var(--paddingWidth);
+  padding-bottom: 16px;
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: min-content;
@@ -35,20 +38,8 @@ body {
   scroll-snap-align: start;
   /* add padding to offset the scroll snap point */
   padding-left: var(--paddingWidth);
-  /* add negative margin to negate the padding */
+  /* add margin to counter the added padding, so item doesn't move */
   margin-left: calc(-1 * var(--paddingWidth));
-}
-
-.item-wrapper:first-of-type {
-  /* don't add negative margin on the first item to create empty space */
-  margin-left: 0;
-}
-
-.item-wrapper:last-of-type {
-  /* add some padding on the right to make scrolling to the last page possible */
-  /* FIXME: can't actually reach the last page */
-  /* TODO: add padding on either side as a "damper" */
-  padding-right: var(--gapWidth);
 }
 
 .controls {

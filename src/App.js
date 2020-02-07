@@ -6,15 +6,13 @@ export const App = () => {
   const add = () => setItems(items + 1);
   const remove = () => setItems(items - 1);
   return (
-    <>
+    <main>
       <Rack items={items} />
-      <div>
-        <span className="controls">
-          <button onClick={remove}>-</button>
-          <span>{items}</span>
-          <button onClick={add}>+</button>
-        </span>
+      <div className="controls">
+        <button onClick={remove}>-</button>
+        <span>{items}</span>
+        <button onClick={add}>+</button>
       </div>
-    </>
+    </main>
   );
 };

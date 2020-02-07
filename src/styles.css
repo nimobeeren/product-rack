@@ -42,12 +42,18 @@ body {
   margin-left: calc(-1 * var(--paddingWidth));
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 32px 0;
+}
+
+.pagination > span,
+.controls > span {
+  margin: 0 8px;
+}
+
 .controls {
   display: flex;
   justify-content: center;
-  margin: 16px 0;
-}
-
-.controls > span {
-  margin: 0 8px;
 }

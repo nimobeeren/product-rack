@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Item } from "./Item";
 
-export const Rack = ({ items, gapWidth = 32, paddingWidth = 128 }) => {
+export const Rack = ({ items }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [pageWidth, setPageWidth] = useState(0);
@@ -10,19 +10,20 @@ export const Rack = ({ items, gapWidth = 32, paddingWidth = 128 }) => {
   const containerRef = useRef();
   const itemWrapperRef = useRef();
 
+  // TODO: list of assumptions
+
   const update = () => {
     const container = containerRef.current;
     const itemWrapper = itemWrapperRef.current;
 
-    // const gapWidth =
-    //   parseFloat(window.getComputedStyle(container).columnGap) || 0;
-    // const paddingWidth =
-    //   parseFloat(window.getComputedStyle(itemWrapper).paddingLeft) || 0;
-    const itemWidth = parseFloat(window.getComputedStyle(itemWrapper).width);
+    const containerStyle = window.getComputedStyle(container);
+    const itemWrapperStyle = window.getComputedStyle(itemWrapper);
+    const gapWidth = parseFloat(containerStyle.columnGap) || 0;
+    const paddingWidth = parseFloat(containerStyle.paddingLeft) || 0;
+    const itemWidth = parseFloat(itemWrapperStyle.width);
 
     const viewWidth = container.getBoundingClientRect().width - paddingWidth;
     const totalWidth = container.scrollWidth - paddingWidth;
-    // const itemWidth = totalWidth / (items + numPlaceholders) - gapWidth;
     const itemsPerPage = Math.floor(
       (viewWidth + gapWidth) / (itemWidth + gapWidth)
     );
@@ -33,6 +34,8 @@ export const Rack = ({ items, gapWidth = 32, paddingWidth = 128 }) => {
     const placeHoldersWidth = numPlaceholders * (itemWidth + gapWidth);
     const partialItemWidth = viewWidth - itemsPerPage * (itemWidth + gapWidth);
     const emptySpaceNew = placeHoldersWidth + partialItemWidth;
+    // FIXME: empty space becomes negative when no item is partially visible,
+    // which makes it impossible to reach the last page
 
     console.log({
       itemsPerPage,

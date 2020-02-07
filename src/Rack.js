@@ -16,6 +16,11 @@ export const Rack = ({ items }) => {
     const container = containerRef.current;
     const itemWrapper = itemWrapperRef.current;
 
+    if (!container || !itemWrapper) {
+      // can't do calculations when we dont have the elements
+      return;
+    }
+
     const containerStyle = window.getComputedStyle(container);
     const itemWrapperStyle = window.getComputedStyle(itemWrapper);
     const gapWidth = parseFloat(containerStyle.columnGap) || 0;
@@ -36,6 +41,8 @@ export const Rack = ({ items }) => {
     const emptySpaceNew = placeHoldersWidth + partialItemWidth;
     // FIXME: empty space becomes negative when no item is partially visible,
     // which makes it impossible to reach the last page
+    // FIXME: handle case where < 1 item is fully visible
+    // TODO: performance, split in scroll update (pagination only) and full update
 
     console.log({
       itemsPerPage,
@@ -64,7 +71,7 @@ export const Rack = ({ items }) => {
   };
 
   // these are all the triggers for updating
-  useEffect(update);
+  useEffect(update, []);
   const handleScroll = update;
   window.onresize = update;
 

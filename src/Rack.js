@@ -29,9 +29,9 @@ export const Rack = ({ items }) => {
     const itemWidth = parseFloat(itemWrapperStyle.width);
 
     const viewWidth = container.getBoundingClientRect().width - paddingWidth;
-    const totalWidth = container.scrollWidth - paddingWidth;
-    const itemsPerPage = Math.floor(
-      (viewWidth + gapWidth) / (itemWidth + gapWidth)
+    const itemsPerPage = Math.max(
+      Math.floor((viewWidth + gapWidth) / (itemWidth + gapWidth)),
+      1
     );
     const pageWidthNew = itemsPerPage * (itemWidth + gapWidth);
     const totalPagesNew = Math.ceil(items / itemsPerPage);
@@ -40,17 +40,13 @@ export const Rack = ({ items }) => {
     const placeHoldersWidth = numPlaceholders * (itemWidth + gapWidth);
     const partialItemWidth = viewWidth - itemsPerPage * (itemWidth + gapWidth);
     const emptySpaceNew = placeHoldersWidth + gapWidth + partialItemWidth;
-    // FIXME: handle case where < 1 item is fully visible
 
     console.log({
-      itemsPerPage,
-      numPlaceholders,
-      itemWidth,
       viewWidth,
-      totalWidth,
-      scrollLeft: container.scrollLeft,
-      gapWidth,
-      emptySpaceNew
+      itemsPerPage,
+      pageWidth: pageWidthNew,
+      numPlaceholders,
+      emptySpace: emptySpaceNew
     });
 
     setCurrentPage(currentPageNew);

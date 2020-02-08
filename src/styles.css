@@ -27,11 +27,15 @@ body {
 }
 
 .item {
-  min-width: 280px;
+  width: 280px;
   height: var(--height);
   object-fit: cover;
   border-radius: 16px;
   border: 1px solid gainsboro;
+
+  /* experimental: try to make at least one item fit the view */
+  max-width: calc(100vw - var(--paddingWidth) - var(--gapWidth));
+  min-width: 150px;
 }
 
 .item-wrapper {

@@ -12,7 +12,7 @@ export const Rack = ({ items }) => {
 
   // TODO: list of assumptions
 
-  // TODO: useReducer?
+  // TODO: performance, split in scroll update (pagination only) and full update (or useReducer?)
   const update = () => {
     const container = containerRef.current;
     const itemWrapper = itemWrapperRef.current;
@@ -39,11 +39,8 @@ export const Rack = ({ items }) => {
     const numPlaceholders = totalPagesNew * itemsPerPage - items;
     const placeHoldersWidth = numPlaceholders * (itemWidth + gapWidth);
     const partialItemWidth = viewWidth - itemsPerPage * (itemWidth + gapWidth);
-    const emptySpaceNew = placeHoldersWidth + partialItemWidth;
-    // FIXME: empty space becomes negative when no item is partially visible,
-    // which makes it impossible to reach the last page
+    const emptySpaceNew = placeHoldersWidth + gapWidth + partialItemWidth;
     // FIXME: handle case where < 1 item is fully visible
-    // TODO: performance, split in scroll update (pagination only) and full update
 
     console.log({
       itemsPerPage,
@@ -72,7 +69,7 @@ export const Rack = ({ items }) => {
   };
 
   // these are all the triggers for updating
-  useEffect(update, []);
+  useEffect(update, [items]);
   const handleScroll = update; // TODO: use requestAnimationFrame for performance
   window.onresize = update; // TODO: probably for this one too
 

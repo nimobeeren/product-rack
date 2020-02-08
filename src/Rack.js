@@ -12,6 +12,7 @@ export const Rack = ({ items }) => {
 
   // TODO: list of assumptions
 
+  // TODO: useReducer?
   const update = () => {
     const container = containerRef.current;
     const itemWrapper = itemWrapperRef.current;
@@ -72,9 +73,10 @@ export const Rack = ({ items }) => {
 
   // these are all the triggers for updating
   useEffect(update, []);
-  const handleScroll = update;
-  window.onresize = update;
+  const handleScroll = update; // TODO: use requestAnimationFrame for performance
+  window.onresize = update; // TODO: probably for this one too
 
+  // TODO: a11y
   return (
     <div>
       <div className="wrapper">

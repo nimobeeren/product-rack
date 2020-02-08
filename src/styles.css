@@ -8,7 +8,7 @@ body {
   --height: 280px; /* the total height of the component */
   --paddingWidth: 128px; /* the empty space left of the first item */
   --gapWidth: 32px; /* the gap between two items */
-  height: var(--height);
+  height: var(--height); /* TODO: dynamic height */
 }
 
 .container {

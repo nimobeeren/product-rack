@@ -34,8 +34,8 @@ body {
   border: 1px solid gainsboro;
 
   /* experimental: try to make at least one item fit the view */
-  max-width: calc(100vw - var(--paddingWidth) - var(--gapWidth));
-  min-width: 150px;
+  /* max-width: calc(100vw - var(--paddingWidth) - var(--gapWidth));
+  min-width: 150px; */
 }
 
 .item-wrapper {
@@ -60,4 +60,8 @@ body {
 .controls {
   display: flex;
   justify-content: center;
+}
+
+.empty-space {
+  background: gainsboro;
 }

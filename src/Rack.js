@@ -28,7 +28,13 @@ export const Rack = ({ items }) => {
     const paddingWidth = parseFloat(containerStyle.paddingLeft) || 0;
     const itemWidth = parseFloat(itemWrapperStyle.width);
 
+    // Distance between the left edge of the first item and the right edge of
+    // the screen
     const viewWidth = container.getBoundingClientRect().width - paddingWidth;
+    // Distance between the left edge of the first item and the right edge of
+    // the last item
+    const totalItemsWidth = items * (itemWidth + gapWidth);
+    // How many items (with gaps) fit completely inside `viewWidth`
     const itemsPerPage = Math.max(
       Math.floor((viewWidth + gapWidth) / (itemWidth + gapWidth)),
       1
@@ -43,8 +49,8 @@ export const Rack = ({ items }) => {
 
     console.log({
       viewWidth,
-      itemsPerPage,
       pageWidth: pageWidthNew,
+      totalItemsWidth,
       numPlaceholders,
       emptySpace: emptySpaceNew
     });
@@ -83,6 +89,7 @@ export const Rack = ({ items }) => {
               <Item id={item} />
             </div>
           ))}
+          {/* TODO: prefer not to create useless div */}
           <div className="empty-space" style={{ width: emptySpace }} />
         </div>
       </div>

@@ -25,12 +25,12 @@ export const Rack = ({ items }) => {
     const containerStyle = window.getComputedStyle(container);
     const itemWrapperStyle = window.getComputedStyle(itemWrapper);
     const gapWidth = parseFloat(containerStyle.columnGap) || 0;
-    const paddingWidth = parseFloat(containerStyle.paddingLeft) || 0;
-    const itemWidth = parseFloat(itemWrapperStyle.width);
+    const paddingLeft = parseFloat(containerStyle.paddingLeft) || 0;
+    const itemWidth = parseFloat(itemWrapperStyle.width) || 0;
 
     // Distance between the left edge of the first item and the right edge of
     // the screen
-    const viewWidth = container.getBoundingClientRect().width - paddingWidth;
+    const viewWidth = container.getBoundingClientRect().width - paddingLeft;
     // Distance between the left edge of the first item and the right edge of
     // the last item
     const totalItemsWidth = items * (itemWidth + gapWidth);
@@ -45,7 +45,7 @@ export const Rack = ({ items }) => {
     const numPlaceholders = totalPagesNew * itemsPerPage - items;
     const placeHoldersWidth = numPlaceholders * (itemWidth + gapWidth);
     const partialItemWidth = viewWidth - itemsPerPage * (itemWidth + gapWidth);
-    const emptySpaceNew = placeHoldersWidth + partialItemWidth;
+    const emptySpaceNew = placeHoldersWidth + gapWidth + partialItemWidth;
 
     console.log({
       viewWidth,
@@ -85,12 +85,13 @@ export const Rack = ({ items }) => {
               className="item-wrapper"
               ref={item === 0 ? itemWrapperRef : undefined}
               key={item}
+              style={
+                item === items - 1 ? { paddingRight: emptySpace } : undefined
+              }
             >
               <Item id={item} />
             </div>
           ))}
-          {/* TODO: prefer not to create useless div */}
-          <div className="empty-space" style={{ width: emptySpace }} />
         </div>
       </div>
       <div className="pagination">

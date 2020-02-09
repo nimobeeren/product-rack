@@ -6,7 +6,7 @@ body {
 
 .wrapper {
   --height: 280px; /* the total height of the component */
-  --paddingWidth: 128px; /* the empty space left of the first item */
+  --paddingLeft: 128px; /* the empty space left of the first item */
   --gapWidth: 32px; /* the gap between two items */
   height: var(--height); /* TODO: dynamic height */
 }
@@ -16,7 +16,7 @@ body {
   position: absolute;
   left: 0;
   width: 100vw;
-  padding-left: var(--paddingWidth);
+  padding-left: var(--paddingLeft);
   padding-bottom: 16px;
   display: grid;
   grid-auto-flow: column;
@@ -41,9 +41,9 @@ body {
 .item-wrapper {
   scroll-snap-align: start;
   /* add padding to offset the scroll snap point */
-  padding-left: var(--paddingWidth);
+  padding-left: var(--paddingLeft);
   /* add margin to counter the added padding, so item doesn't move */
-  margin-left: calc(-1 * var(--paddingWidth));
+  margin-left: calc(-1 * var(--paddingLeft));
 }
 
 .pagination {

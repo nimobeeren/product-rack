@@ -18,7 +18,7 @@ export const Rack = ({ items }) => {
     const itemWrapper = itemWrapperRef.current;
 
     if (!container || !itemWrapper) {
-      // can't do calculations when we dont have the elements
+      // can't do calculations when we don't have the elements
       return;
     }
 
@@ -45,7 +45,7 @@ export const Rack = ({ items }) => {
     const numPlaceholders = totalPagesNew * itemsPerPage - items;
     const placeHoldersWidth = numPlaceholders * (itemWidth + gapWidth);
     const partialItemWidth = viewWidth - itemsPerPage * (itemWidth + gapWidth);
-    const emptySpaceNew = placeHoldersWidth + gapWidth + partialItemWidth;
+    const emptySpaceNew = placeHoldersWidth + partialItemWidth;
 
     console.log({
       viewWidth,

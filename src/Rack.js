@@ -11,6 +11,7 @@ export const Rack = ({ numItems }) => {
   const itemWrapperRef = useRef();
 
   // TODO: list of assumptions
+  // TODO: take a possible right padding into account
 
   // TODO: performance, split in scroll update (pagination only) and full update (or useReducer?)
   const update = () => {
@@ -91,21 +92,19 @@ export const Rack = ({ numItems }) => {
   // TODO: a11y
   return (
     <div>
-      <div className="wrapper">
-        <div className="container" ref={containerRef} onScroll={handleScroll}>
-          {[...Array(numItems).keys()].map(item => (
-            <div
-              className="item-wrapper"
-              ref={item === 0 ? itemWrapperRef : undefined}
-              key={item}
-              style={
-                item === numItems - 1 ? { paddingRight: emptySpace } : undefined
-              }
-            >
-              <Item id={item} />
-            </div>
-          ))}
-        </div>
+      <div className="container" ref={containerRef} onScroll={handleScroll}>
+        {[...Array(numItems).keys()].map(item => (
+          <div
+            className="item-wrapper"
+            ref={item === 0 ? itemWrapperRef : undefined}
+            key={item}
+            style={
+              item === numItems - 1 ? { paddingRight: emptySpace } : undefined
+            }
+          >
+            <Item id={item} />
+          </div>
+        ))}
       </div>
       <div className="pagination">
         <button onClick={() => scrollToPage(currentPage - 1)}>Prev</button>

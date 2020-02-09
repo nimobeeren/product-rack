@@ -6,7 +6,10 @@ body {
 
 main {
   background: paleturquoise;
-  margin: 16px 128px;
+  margin: 0 128px; /* set this equal to the padding width to show it aligns */
+  padding: 16px 0;
+  height: 100vh;
+  box-sizing: border-box;
 }
 
 .container {
@@ -17,14 +20,16 @@ main {
   width: 100vw;
   box-sizing: border-box;
 
-  --paddingLeft: 128px; /* the empty space left of the first item */
-  padding-left: var(--paddingLeft);
-  padding-right: 128px;
-  padding-bottom: 16px;
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: min-content;
   column-gap: 32px;
+
+  --paddingWidth: 128px;
+  padding-left: var(--paddingWidth);
+  padding-right: var(--paddingWidth);
+  padding-bottom: 16px; /* make some extra space for the scrollbar */
+
   overflow: auto hidden;
   scroll-snap-type: x mandatory;
 }
@@ -44,8 +49,8 @@ main {
 .item-wrapper {
   scroll-snap-align: start;
   /* offset the scroll snap point without moving the item*/
-  padding-left: var(--paddingLeft);
-  margin-left: calc(-1 * var(--paddingLeft));
+  padding-left: var(--paddingWidth);
+  margin-left: calc(-1 * var(--paddingWidth));
 }
 
 .pagination {

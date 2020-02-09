@@ -10,8 +10,10 @@ export const Rack = ({ numItems }) => {
   const containerRef = useRef();
   const itemWrapperRef = useRef();
 
-  // TODO: list of assumptions
-  // TODO: take a possible right padding into account
+  // Assumptions:
+  // - Items have equal width
+  // - Items are positioned in a CSS grid row
+  // - Items are spaced using `column-gap`
 
   // TODO: performance, split in scroll update (pagination only) and full update (or useReducer?)
   const update = () => {
@@ -27,17 +29,18 @@ export const Rack = ({ numItems }) => {
     const itemWrapperStyle = window.getComputedStyle(itemWrapper);
     const gapWidth = parseFloat(containerStyle.columnGap) || 0;
     const paddingLeft = parseFloat(containerStyle.paddingLeft) || 0;
+    const paddingRight = parseFloat(containerStyle.paddingRight) || 0;
     const itemWidth = parseFloat(itemWrapperStyle.width) || 0;
+    const containerBorderBoxWidth = container.getBoundingClientRect().width;
 
-    // Distance between the left edge of the first item and the right edge of
-    // the screen
-    const viewWidth = container.getBoundingClientRect().width - paddingLeft;
+    // Width of the container (not including padding)
+    const containerWidth = containerBorderBoxWidth - paddingLeft - paddingRight;
     // Distance between the left edge of the first item and the right edge of
     // the last item
     const totalItemsWidth = numItems * (itemWidth + gapWidth);
-    // How many items (with gaps) fit completely inside `viewWidth`
+    // How many items (with gaps) fit completely inside the container
     const maxItemsPerPage = Math.max(
-      Math.floor((viewWidth + gapWidth) / (itemWidth + gapWidth)),
+      Math.floor((containerWidth + gapWidth) / (itemWidth + gapWidth)),
       1
     );
     // Combined width of items (with gaps) on a fully filled page
@@ -51,17 +54,18 @@ export const Rack = ({ numItems }) => {
     const numPlaceholders = totalPagesNew * maxItemsPerPage - numItems;
     // Combined width of placeholders (with gaps)
     const placeHoldersWidth = numPlaceholders * (itemWidth + gapWidth);
-    // Distance between the left edge of the next item that doesn't fit on the
-    // screen, and the right edge of the screen
-    // In other words: how much of the next item is visible (initialy)
+    // Distance between the left edge of the next item that doesn't fit in the
+    // container, and the right edge of the container
+    // In other words: how much of the next item is inside the container
     const partialItemWidth =
-      viewWidth - maxItemsPerPage * (itemWidth + gapWidth);
-    // The amount of empty space between the right of the last item and the
-    // right edge of the screen
-    const emptySpaceNew = placeHoldersWidth + gapWidth + partialItemWidth;
+      containerWidth - maxItemsPerPage * (itemWidth + gapWidth);
+    // The amount of empty space between the right edge of the last item and
+    // the right edge of the screen
+    const emptySpaceNew =
+      placeHoldersWidth + gapWidth + partialItemWidth + paddingRight;
 
     console.log({
-      viewWidth,
+      viewWidth: containerWidth,
       pageWidth: pageWidthNew,
       totalItemsWidth,
       numPlaceholders,

@@ -19,6 +19,7 @@ main {
 
   --paddingLeft: 128px; /* the empty space left of the first item */
   padding-left: var(--paddingLeft);
+  padding-right: 128px;
   padding-bottom: 16px;
   display: grid;
   grid-auto-flow: column;
@@ -42,9 +43,8 @@ main {
 
 .item-wrapper {
   scroll-snap-align: start;
-  /* add padding to offset the scroll snap point */
+  /* offset the scroll snap point without moving the item*/
   padding-left: var(--paddingLeft);
-  /* add margin to counter the added padding, so item doesn't move */
   margin-left: calc(-1 * var(--paddingLeft));
 }
 
@@ -62,8 +62,4 @@ main {
 .controls {
   display: flex;
   justify-content: center;
-}
-
-.empty-space {
-  background: gainsboro;
 }

@@ -21,7 +21,7 @@ export const Rack = ({ numItems }) => {
     const itemWrapper = itemWrapperRef.current;
 
     if (!container || !itemWrapper) {
-      // can't do calculations when we don't have the elements
+      // Can't do calculations when we don't have the elements
       return;
     }
 
@@ -65,7 +65,7 @@ export const Rack = ({ numItems }) => {
       placeHoldersWidth + gapWidth + partialItemWidth + paddingRight;
 
     console.log({
-      viewWidth: containerWidth,
+      containerWidth,
       pageWidth: pageWidthNew,
       totalItemsWidth,
       numPlaceholders,
@@ -88,7 +88,7 @@ export const Rack = ({ numItems }) => {
     });
   };
 
-  // these are all the triggers for updating
+  // These are all the triggers for updating
   useEffect(update, [numItems]);
   const handleScroll = update; // TODO: use requestAnimationFrame for performance
   window.onresize = update; // TODO: probably for this one too

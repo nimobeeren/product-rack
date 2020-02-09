@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Item } from "./Item";
 
-export const Rack = ({ items }) => {
+export const Rack = ({ numItems }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [pageWidth, setPageWidth] = useState(0);
@@ -33,18 +33,30 @@ export const Rack = ({ items }) => {
     const viewWidth = container.getBoundingClientRect().width - paddingLeft;
     // Distance between the left edge of the first item and the right edge of
     // the last item
-    const totalItemsWidth = items * (itemWidth + gapWidth);
+    const totalItemsWidth = numItems * (itemWidth + gapWidth);
     // How many items (with gaps) fit completely inside `viewWidth`
-    const itemsPerPage = Math.max(
+    const maxItemsPerPage = Math.max(
       Math.floor((viewWidth + gapWidth) / (itemWidth + gapWidth)),
       1
     );
-    const pageWidthNew = itemsPerPage * (itemWidth + gapWidth);
-    const totalPagesNew = Math.ceil(items / itemsPerPage);
+    // Combined width of items (with gaps) on a fully filled page
+    const pageWidthNew = maxItemsPerPage * (itemWidth + gapWidth);
+    // Total number of pages
+    const totalPagesNew = Math.ceil(numItems / maxItemsPerPage);
+    // Current page
     const currentPageNew = Math.floor(container.scrollLeft / pageWidthNew) + 1;
-    const numPlaceholders = totalPagesNew * itemsPerPage - items;
+    // Number of additional items (call them placeholders) needed to fill up
+    // the last page
+    const numPlaceholders = totalPagesNew * maxItemsPerPage - numItems;
+    // Combined width of placeholders (with gaps)
     const placeHoldersWidth = numPlaceholders * (itemWidth + gapWidth);
-    const partialItemWidth = viewWidth - itemsPerPage * (itemWidth + gapWidth);
+    // Distance between the left edge of the next item that doesn't fit on the
+    // screen, and the right edge of the screen
+    // In other words: how much of the next item is visible (initialy)
+    const partialItemWidth =
+      viewWidth - maxItemsPerPage * (itemWidth + gapWidth);
+    // The amount of empty space between the right of the last item and the
+    // right edge of the screen
     const emptySpaceNew = placeHoldersWidth + gapWidth + partialItemWidth;
 
     console.log({
@@ -52,6 +64,7 @@ export const Rack = ({ items }) => {
       pageWidth: pageWidthNew,
       totalItemsWidth,
       numPlaceholders,
+      partialItemWidth,
       emptySpace: emptySpaceNew
     });
 
@@ -71,7 +84,7 @@ export const Rack = ({ items }) => {
   };
 
   // these are all the triggers for updating
-  useEffect(update, [items]);
+  useEffect(update, [numItems]);
   const handleScroll = update; // TODO: use requestAnimationFrame for performance
   window.onresize = update; // TODO: probably for this one too
 
@@ -80,13 +93,13 @@ export const Rack = ({ items }) => {
     <div>
       <div className="wrapper">
         <div className="container" ref={containerRef} onScroll={handleScroll}>
-          {[...Array(items).keys()].map(item => (
+          {[...Array(numItems).keys()].map(item => (
             <div
               className="item-wrapper"
               ref={item === 0 ? itemWrapperRef : undefined}
               key={item}
               style={
-                item === items - 1 ? { paddingRight: emptySpace } : undefined
+                item === numItems - 1 ? { paddingRight: emptySpace } : undefined
               }
             >
               <Item id={item} />

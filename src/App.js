@@ -7,7 +7,7 @@ export const App = () => {
   const remove = () => setItems(items - 1);
   return (
     <main>
-      <Rack items={items} />
+      <Rack numItems={items} />
       <div className="controls">
         <button onClick={remove}>-</button>
         <span>{items}</span>

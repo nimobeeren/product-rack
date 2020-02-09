@@ -13,14 +13,6 @@ export function Rack({ numItems }) {
   const itemWrapperRef = useRef();
 
   const [state, dispatch] = useReducer((prevState, action) => {
-    const container = containerRef.current;
-    const itemWrapper = itemWrapperRef.current;
-
-    if (!container || !itemWrapper) {
-      // Can't do calculations when we don't have these elements
-      return prevState;
-    }
-
     // Assumptions:
     // - Items have equal width
     // - Items are positioned in a CSS grid row
@@ -30,6 +22,16 @@ export function Rack({ numItems }) {
       case "init":
       case "scroll":
       case "resize":
+        const container = containerRef.current;
+        const itemWrapper = itemWrapperRef.current;
+
+        if (!container || !itemWrapper) {
+          // Can't do calculations when we don't have these elements
+          return prevState;
+        }
+
+        // Get all the things we need from the DOM
+        const scrollPos = container.scrollLeft;
         const containerStyle = window.getComputedStyle(container);
         const itemWrapperStyle = window.getComputedStyle(itemWrapper);
         const gapWidth = parseFloat(containerStyle.columnGap) || 0;
@@ -41,8 +43,8 @@ export function Rack({ numItems }) {
         // Width of the container (not including padding)
         const containerWidth =
           containerBorderBoxWidth - paddingLeft - paddingRight;
-        // Distance between the left edge of the first item and the right edge of
-        // the last item
+        // Distance between the left edge of the first item and the right edge
+        // of the last item
         const totalItemsWidth = numItems * (itemWidth + gapWidth);
         // How many items (with gaps) fit completely inside the container
         const maxItemsPerPage = Math.max(
@@ -54,15 +56,14 @@ export function Rack({ numItems }) {
         // Total number of pages
         const totalPagesNew = Math.ceil(numItems / maxItemsPerPage);
         // Current page
-        const currentPageNew =
-          Math.floor(container.scrollLeft / pageWidthNew) + 1;
+        const currentPageNew = Math.floor(scrollPos / pageWidthNew) + 1;
         // Number of additional items (call them placeholders) needed to fill up
         // the last page
         const numPlaceholders = totalPagesNew * maxItemsPerPage - numItems;
         // Combined width of placeholders (with gaps)
         const placeHoldersWidth = numPlaceholders * (itemWidth + gapWidth);
-        // Distance between the left edge of the next item that doesn't fit in the
-        // container, and the right edge of the container
+        // Distance between the left edge of the next item that doesn't fit in
+        // the container, and the right edge of the container
         // In other words: how much of the next item is inside the container
         const partialItemWidth =
           containerWidth - maxItemsPerPage * (itemWidth + gapWidth);
@@ -102,9 +103,11 @@ export function Rack({ numItems }) {
   // @ts-ignore
   useEffect(() => dispatch({ type: "init" }), [numItems]);
   // @ts-ignore
-  const handleScroll = () => dispatch({ type: "scroll" }); // TODO: use requestAnimationFrame for performance
+  // TODO: use requestAnimationFrame for performance
+  const handleScroll = () => dispatch({ type: "scroll" });
   // @ts-ignore
-  window.onresize = () => dispatch({ type: "resize" }); // TODO: probably for this one too
+  // TODO: probably for this one too
+  window.onresize = () => dispatch({ type: "resize" });
 
   const { emptySpace, currentPage, totalPages } = state;
 

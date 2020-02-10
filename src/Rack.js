@@ -1,8 +1,21 @@
 import React, { useRef, useEffect, useReducer } from "react";
 import { Item } from "./Item";
 
+// Assumptions:
+// - Items have equal width
+// - Items are positioned in a CSS grid row
+// - Items are spaced using `column-gap`
+
+function calculatePagination(numItems, maxItemsPerPage, scrollPos, pageWidth) {
+  return {
+    totalPages: Math.ceil(numItems / maxItemsPerPage),
+    currentPage: Math.floor(scrollPos / pageWidth) + 1
+  };
+}
+
 export function Rack({ numItems }) {
   const initialState = {
+    maxItemsPerPage: 0,
     currentPage: 1,
     totalPages: 1,
     pageWidth: 0,
@@ -13,25 +26,39 @@ export function Rack({ numItems }) {
   const itemWrapperRef = useRef();
 
   const [state, dispatch] = useReducer((prevState, action) => {
-    // Assumptions:
-    // - Items have equal width
-    // - Items are positioned in a CSS grid row
-    // - Items are spaced using `column-gap`
-
+    console.log("reduced called with type", action.type);
+    let container, scrollPos;
     switch (action.type) {
-      case "init":
       case "scroll":
-      case "resize":
-        const container = containerRef.current;
-        const itemWrapper = itemWrapperRef.current;
-
-        if (!container || !itemWrapper) {
-          // Can't do calculations when we don't have these elements
+        // Get needed elements from refs
+        container = containerRef.current;
+        if (!container) {
           return prevState;
         }
 
         // Get all the things we need from the DOM
-        const scrollPos = container.scrollLeft;
+        scrollPos = container.scrollLeft;
+
+        return {
+          ...prevState,
+          ...calculatePagination(
+            numItems,
+            prevState.maxItemsPerPage,
+            scrollPos,
+            prevState.pageWidth
+          )
+        };
+      case "init":
+      case "resize":
+        // Get needed elements from refs
+        container = containerRef.current;
+        const itemWrapper = itemWrapperRef.current;
+        if (!container || !itemWrapper) {
+          return;
+        }
+
+        // Get all the things we need from the DOM
+        scrollPos = container.scrollLeft;
         const containerStyle = window.getComputedStyle(container);
         const itemWrapperStyle = window.getComputedStyle(itemWrapper);
         const gapWidth = parseFloat(containerStyle.columnGap) || 0;
@@ -43,23 +70,23 @@ export function Rack({ numItems }) {
         // Width of the container (not including padding)
         const containerWidth =
           containerBorderBoxWidth - paddingLeft - paddingRight;
-        // Distance between the left edge of the first item and the right edge
-        // of the last item
-        const totalItemsWidth = numItems * (itemWidth + gapWidth);
         // How many items (with gaps) fit completely inside the container
         const maxItemsPerPage = Math.max(
           Math.floor((containerWidth + gapWidth) / (itemWidth + gapWidth)),
           1
         );
         // Combined width of items (with gaps) on a fully filled page
-        const pageWidthNew = maxItemsPerPage * (itemWidth + gapWidth);
-        // Total number of pages
-        const totalPagesNew = Math.ceil(numItems / maxItemsPerPage);
-        // Current page
-        const currentPageNew = Math.floor(scrollPos / pageWidthNew) + 1;
+        const pageWidth = maxItemsPerPage * (itemWidth + gapWidth);
+        // Pagination
+        const { totalPages, currentPage } = calculatePagination(
+          numItems,
+          maxItemsPerPage,
+          scrollPos,
+          pageWidth
+        );
         // Number of additional items (call them placeholders) needed to fill up
         // the last page
-        const numPlaceholders = totalPagesNew * maxItemsPerPage - numItems;
+        const numPlaceholders = totalPages * maxItemsPerPage - numItems;
         // Combined width of placeholders (with gaps)
         const placeHoldersWidth = numPlaceholders * (itemWidth + gapWidth);
         // Distance between the left edge of the next item that doesn't fit in
@@ -69,24 +96,26 @@ export function Rack({ numItems }) {
           containerWidth - maxItemsPerPage * (itemWidth + gapWidth);
         // The amount of empty space between the right edge of the last item and
         // the right edge of the screen
-        const emptySpaceNew =
+        const emptySpace =
           placeHoldersWidth + gapWidth + partialItemWidth + paddingRight;
 
-        console.log({
-          containerWidth,
-          pageWidth: pageWidthNew,
-          totalItemsWidth,
-          emptySpace: emptySpaceNew
-        });
+        // console.log({
+        //   maxItemsPerPage,
+        //   currentPage,
+        //   totalPages,
+        //   pageWidth,
+        //   emptySpace
+        // });
 
         return {
-          currentPage: currentPageNew,
-          totalPages: totalPagesNew,
-          pageWidth: pageWidthNew,
-          emptySpace: emptySpaceNew
+          maxItemsPerPage,
+          currentPage,
+          totalPages,
+          pageWidth,
+          emptySpace
         };
       default:
-        throw new Error();
+        throw new Error("Action type not supported");
     }
   }, initialState);
 
@@ -100,20 +129,18 @@ export function Rack({ numItems }) {
   };
 
   // These are all the triggers for updating
-  // @ts-ignore
   useEffect(() => dispatch({ type: "init" }), [numItems]);
-  // @ts-ignore
   // TODO: use requestAnimationFrame for performance
   const handleScroll = () => dispatch({ type: "scroll" });
-  // @ts-ignore
   // TODO: probably for this one too
+  // FIXME: this one is never actually dispatching the action for some reason
   window.onresize = () => dispatch({ type: "resize" });
 
   const { emptySpace, currentPage, totalPages } = state;
 
   // TODO: a11y
   return (
-    <div>
+    <div className="temp">
       <div className="container" ref={containerRef} onScroll={handleScroll}>
         {[...Array(numItems).keys()].map(item => (
           <div

@@ -47,11 +47,10 @@ main {
   height: 280px;
   object-fit: cover;
   border-radius: 16px;
-  border: 1px solid gray;
 
-  /* experimental: try to make at least one item fit the view */
-  /* max-width: calc(100vw - var(--paddingWidth) - var(--gapWidth));
-  min-width: 150px; */
+  /* try to make at least one item fit the container */
+  max-width: calc(100vw - 2 * var(--paddingWidth));
+  min-width: 150px;
 }
 
 .item-wrapper {

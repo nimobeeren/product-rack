@@ -48,13 +48,11 @@ main {
   object-fit: cover;
   border-radius: 16px;
 
+  scroll-snap-align: start;
+
   /* try to make at least one item fit the container */
   max-width: calc(100vw - 2 * var(--paddingWidth));
   min-width: 150px;
-}
-
-.item-wrapper {
-  scroll-snap-align: start;
 }
 
 .pagination {

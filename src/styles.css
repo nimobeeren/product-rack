@@ -1,12 +1,20 @@
+:root {
+  --paddingWidth: 128px;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  /* TODO: might want overflow-x hidden to avoid horizontal scrollbar */
+  /* when vertical scrollbar appears (due to elements having 100vw). */
+  /* seems like this exposes an issue with our code which breaks the */
+  /* alignment in such cases */
 }
 
 main {
   background: paleturquoise;
-  margin: 0 128px; /* set this equal to the padding width to show it aligns */
+  margin: 0 var(--paddingWidth); /* set this equal to the padding width to show it aligns */
   padding: 16px 0;
   height: 100vh;
   box-sizing: border-box;
@@ -25,13 +33,13 @@ main {
   grid-auto-columns: min-content;
   column-gap: 32px;
 
-  --paddingWidth: 128px;
   padding-left: var(--paddingWidth);
   padding-right: var(--paddingWidth);
   padding-bottom: 16px; /* make some extra space for the scrollbar */
 
   overflow: auto hidden;
   scroll-snap-type: x mandatory;
+  scroll-padding: var(--paddingWidth);
 }
 
 .item {
@@ -48,9 +56,6 @@ main {
 
 .item-wrapper {
   scroll-snap-align: start;
-  /* offset the scroll snap point without moving the item*/
-  padding-left: var(--paddingWidth);
-  margin-left: calc(-1 * var(--paddingWidth));
 }
 
 .pagination {
